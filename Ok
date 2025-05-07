@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuiz Matematik Sekolah Menengah</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f0f8ff; }
+    #soalan { font-size: 1.3em; margin-bottom: 10px; }
+    input, button { padding: 10px; font-size: 1em; margin-top: 10px; }
+    #result, #skor { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Kuiz Matematik Sekolah Menengah</h1>
+  <div id="soalan"></div>
+  <input type="text" id="jawapan" placeholder="Jawapan anda di sini" />
+  <br />
+  <button onclick="semakJawapan()">Hantar</button>
+  <div id="result"></div>
+  <div id="skor"></div>
+
+  <script>
+    let skor = 0;
+    let bilSoalan = 0;
+    let jawapanBetul = 0;
+
+    function rawak(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function tanyaSoalan() {
+      const jenis = rawak(1, 3);
+      let soalan, jawapan;
+
+      if (jenis === 1) {
+        const x = rawak(1, 10), y = rawak(1, 10);
+        soalan = `Selesaikan: x + y jika x = ${x} dan y = ${y}`;
+        jawapan = x + y;
+      } else if (jenis === 2) {
+        const a = rawak(1, 10), b = rawak(1, 10), c = rawak(1, 10), d = rawak(1, 10);
+        soalan = `Selesaikan: (${a}/${b}) + (${c}/${d}) dalam bentuk perpuluhan (2 tempat perpuluhan)`;
+        jawapan = +(a / b + c / d).toFixed(2);
+      } else {
+        const base = rawak(2, 5), power = rawak(2, 4);
+        soalan = `Selesaikan: ${base}<sup>${power}</sup>`;
+        jawapan = base ** power;
+      }
+
+      document.getElementById("soalan").innerHTML = soalan;
+      document.getElementById("jawapan").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("jawapan").focus();
+      jawapanBetul = jawapan;
+    }
+
+    function semakJawapan() {
+      const input = parseFloat(document.getElementById("jawapan").value);
+      const result = document.getElementById("result");
+      bilSoalan++;
+
+      if (Math.abs(input - jawapanBetul) < 0.01) {
+        skor++;
+        result.innerHTML = "Betul!";
+      } else {
+        result.innerHTML = `Salah. Jawapan betul: ${jawapanBetul}`;
+      }
+
+      if (bilSoalan < 5) {
+        setTimeout(tanyaSoalan, 1500);
+      } else {
+        document.getElementById("skor").innerHTML = `Kuiz Tamat! Skor anda: ${skor}/5`;
+        document.getElementById("soalan").innerHTML = "";
+        document.querySelector("button").disabled = true;
+      }
+    }
+
+    window.onload = tanyaSoalan;
+  </script>
+</body>
+</html>
